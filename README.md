@@ -1,5 +1,5 @@
 # How to launch:
 
-- 1. npm install
+-  npm install
 
-- 2. node 
+-  node node game.js 7,7,7,7,7,7 4,4,4,4,4,4 9,9,9,9,9,9 1,1,1,1,1,1 5,5,5,5,5,5
