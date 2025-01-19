@@ -1,0 +1,16 @@
+{
+  "name": "task3",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "game.js",
+  "scripts": {
+    "start": "node game.js"
+  },
+  "keywords": [],
+  "author": "Dennis Polukaroff <dennispolukaroff@gmail.com> (https://github.com/denderange)",
+  "license": "ISC",
+  "description": "non-transitive dice game",
+  "dependencies": {
+    "ascii-table": "^0.0.9"
+  }
+}
