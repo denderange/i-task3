@@ -25,4 +25,4 @@ class FairRandomGenerator {
   }
 }
 
-export const generate = FairRandomGenerator.generate;
+export default FairRandomGenerator;

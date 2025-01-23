@@ -47,7 +47,7 @@ export class GameManager {
       this.fairRollManager.generateFairRandom(2);
 
     console.log(
-      `I have chosen a number (HMAC=${hmac}). Try to guess it (0 or 1).`
+      `I selected a random number (HMAC=${hmac}). Try to guess it (0 or 1).`
     );
     const userGuess = await this.playerManager.askUser('Your choice: ');
     const correct = randomValue.toString();
@@ -64,11 +64,12 @@ export class GameManager {
   async playRound() {
     console.log("Let's roll the dice!");
 
-    const computerRoll = await this.fairRollManager.performFairRoll(
-      this.computerDice.faces.length,
-      'computer'
-    );
-    console.log(`My throw is: ${this.computerDice.faces[computerRoll]}`);
+    const { randomValue: computerRoll, key: computerKey } =
+      await this.fairRollManager.performFairRoll(
+        this.computerDice.faces.length,
+        'computer'
+      );
+    console.log(`My throw HMAC=${computerKey}.`);
 
     const userRoll = await this.fairRollManager.performFairRoll(
       this.userDice.faces.length,
@@ -76,7 +77,10 @@ export class GameManager {
     );
     console.log(`Your throw is: ${this.userDice.faces[userRoll]}`);
 
+    console.log(`Revealing my throw...`);
     const computerValue = this.computerDice.faces[computerRoll];
+    console.log(`My throw is: ${computerValue} (KEY=${computerKey}).`);
+
     const userValue = this.userDice.faces[userRoll];
 
     if (userValue > computerValue) {
@@ -86,5 +90,8 @@ export class GameManager {
     } else {
       console.log(`It's a tie! (${userValue} = ${computerValue})`);
     }
+
+    console.log('Thank you for playing! Exiting the game...');
+    process.exit(0);
   }
 }
