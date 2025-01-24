@@ -12,10 +12,4 @@ export class Dice {
 
     this.faces = faces;
   }
-
-  roll() {
-    const index = Math.floor(Math.random() * this.faces.length);
-
-    return this.faces[index];
-  }
 }

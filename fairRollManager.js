@@ -1,17 +1,15 @@
 import FairRandomGenerator from './fairRandomGenerator.js';
 
 export class FairRollManager {
-  generateFairRandom(range) {
-    return FairRandomGenerator.generate(range);
-  }
-
   async performFairRoll(range, participant, askUser = null) {
     const { key, randomValue, hmac } = FairRandomGenerator.generate(range);
 
     if (participant === 'computer') {
-      console.log(`I selected a random value (HMAC=${hmac}).`);
+      console.log(
+        `I selected a random value in the range 0..${range - 1} (HMAC=${hmac}).`
+      );
       console.log('You will know my choice after you make yours.');
-      return { randomValue, key };
+      return { randomValue, key, hmac };
     } else if (askUser) {
       console.log(`Add your number modulo ${range}.`);
       const userValue = await askUser(

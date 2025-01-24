@@ -1,6 +1,6 @@
 import { randomBytes, randomInt, createHmac } from 'crypto';
 
-class FairRandomGenerator {
+export default class FairRandomGenerator {
   static generate(range) {
     if (range <= 0) {
       throw new Error('Range must be greater than 0.');
@@ -24,5 +24,3 @@ class FairRandomGenerator {
     return recalculatedHmac === hmac;
   }
 }
-
-export default FairRandomGenerator;

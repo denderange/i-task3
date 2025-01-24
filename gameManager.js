@@ -44,7 +44,7 @@ export class GameManager {
   async determineFirstMove() {
     console.log("Let's determine who goes first.");
     const { key, randomValue, hmac } =
-      this.fairRollManager.generateFairRandom(2);
+      await this.fairRollManager.performFairRoll(2, 'computer');
 
     console.log(
       `I selected a random number (HMAC=${hmac}). Try to guess it (0 or 1).`
@@ -62,26 +62,39 @@ export class GameManager {
   }
 
   async playRound() {
-    console.log("Let's roll the dice!");
+    console.log("It's time for the first throw!");
 
-    const { randomValue: computerRoll, key: computerKey } =
-      await this.fairRollManager.performFairRoll(
-        this.computerDice.faces.length,
-        'computer'
-      );
-    console.log(`My throw HMAC=${computerKey}.`);
+    const {
+      randomValue: computerRoll,
+      key: computerKey,
+      hmac: computerHmac,
+    } = await this.fairRollManager.performFairRoll(
+      this.computerDice.faces.length,
+      'computer'
+    );
+
+    console.log(
+      `I selected a random value in the range 0..${
+        this.computerDice.faces.length - 1
+      } (HMAC=${computerHmac}).`
+    );
 
     const userRoll = await this.fairRollManager.performFairRoll(
       this.userDice.faces.length,
-      'user'
+      'user',
+      async (prompt) => {
+        const userInput = await this.playerManager.askUser(prompt);
+        return parseInt(userInput, 10);
+      }
     );
-    console.log(`Your throw is: ${this.userDice.faces[userRoll]}`);
 
-    console.log(`Revealing my throw...`);
-    const computerValue = this.computerDice.faces[computerRoll];
-    console.log(`My throw is: ${computerValue} (KEY=${computerKey}).`);
-
+    console.log(`My number was ${computerRoll} (KEY=${computerKey}).`);
     const userValue = this.userDice.faces[userRoll];
+    const computerValue = this.computerDice.faces[computerRoll];
+
+    console.log(
+      `Result: Your dice (${userValue}) vs My dice (${computerValue})`
+    );
 
     if (userValue > computerValue) {
       console.log(`You win! (${userValue} > ${computerValue})`);
@@ -91,7 +104,6 @@ export class GameManager {
       console.log(`It's a tie! (${userValue} = ${computerValue})`);
     }
 
-    console.log('Thank you for playing! Exiting the game...');
-    process.exit(0);
+    console.log('Thank you for playing!');
   }
 }
